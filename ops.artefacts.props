@@ -145,9 +145,9 @@
     <ItemGroup Condition=" '$(ShouldLoadPackerImagesToBuild)' == 'true' ">
         <PackerImagesToBuild
             Condition=" '$(DirSrcPacker)' != '' "
-            Include="$(DirSrcPacker)\ubuntu_1604\hyperv.json">
+            Include="$(DirSrcPacker)\hyperv.json">
             <Variables>
-                $(DirBuildTemp)\ubuntu_1604\packer_variables.json
+                $(DirBuildTemp)\packer_variables.json
             </Variables>
         </PackerImagesToBuild>
     </ItemGroup>

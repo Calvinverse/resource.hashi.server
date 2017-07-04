@@ -136,12 +136,12 @@
         Additional parameters can be provided through the 'TemplateTokens' ItemGroup below.
     -->
     <ItemGroup Condition=" '$(ShouldLoadBuildFilesToGenerate)' == 'true' ">
-        <BuildFilesToGenerate Include="$(DirBuildTempCookbooks)\resource_container_host_linux\metadata.rb">
-            <Template>$(DirSrcCookbooks)\resource_container_host_linux\metadata.rb</Template>
+        <BuildFilesToGenerate Include="$(DirBuildTempCookbooks)\resource_hashi_server\metadata.rb">
+            <Template>$(DirSrcCookbooks)\resource_hashi_server\metadata.rb</Template>
             <Encoding></Encoding>
         </BuildFilesToGenerate>
-        <BuildFilesToGenerate Include="$(DirBuildTemp)\ubuntu_1604\packer_variables.json">
-            <Template>$(DirSrcPacker)\ubuntu_1604\packer_variables.json</Template>
+        <BuildFilesToGenerate Include="$(DirBuildTemp)\packer_variables.json">
+            <Template>$(DirSrcPacker)\packer_variables.json</Template>
             <Encoding></Encoding>
         </BuildFilesToGenerate>
     </ItemGroup>
@@ -460,7 +460,7 @@
         The collection of cookbooks that should be analyzed with Foodcritic
     -->
     <ItemGroup Condition=" '$(ShouldLoadChefCookbooksToAnalyze)' == 'true' ">
-        <ChefCookbooksToAnalyze Include="$(DirBuildTempCookbooks)\resource_container_host_linux" >
+        <ChefCookbooksToAnalyze Include="$(DirBuildTempCookbooks)\resource_hashi_server" >
             <!--
                 Ignore:
                 FC071 - Missing LICENSE file: because it's there, just not in the expected directory
@@ -477,7 +477,7 @@
         The collection of cookbooks that should be tested with ChefSpec.
     -->
     <ItemGroup Condition=" '$(ShouldLoadChefCookbooksToTest)' == 'true' ">
-        <ChefCookbooksToTest Include="$(DirBuildTempCookbooks)\resource_container_host_linux">
+        <ChefCookbooksToTest Include="$(DirBuildTempCookbooks)\resource_hashi_server">
             <ChefSpecPattern>./spec/*_spec.rb</ChefSpecPattern>
         </ChefCookbooksToTest>
     </ItemGroup>
