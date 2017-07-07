@@ -1,4 +1,4 @@
 packages/
 build/
 berks/
-src/cookbooks/resource_container_host_linux/.bundle/
+src/cookbooks/resource_hashi_server/.bundle/

@@ -41,8 +41,8 @@ describe 'resource_hashi_server::nomad' do
         enabled = false
       }
     HCL
-    it 'creates nomad_client.hcl in the nomad configuration directory' do
-      expect(chef_run).to create_file('/etc/nomad-conf.d/nomad_client.hcl')
+    it 'creates server.hcl in the nomad configuration directory' do
+      expect(chef_run).to create_file('/etc/nomad-conf.d/server.hcl')
         .with_content(nomad_client_config_content)
     end
   end

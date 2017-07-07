@@ -275,7 +275,7 @@
         The collection of cookbooks for which the dependencies should be restored with Berkshelf
     -->
     <ItemGroup Condition=" '$(ShouldLoadChefCookbooksToRestore)' == 'true' ">
-        <ChefCookbooksToRestore Include="$(DirBuildTempCookbooks)\resource_container_host_linux" />
+        <ChefCookbooksToRestore Include="$(DirBuildTempCookbooks)\resource_hashi_server" />
     </ItemGroup>
 
 
