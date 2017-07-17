@@ -37,6 +37,9 @@ file '/etc/init.d/provision.sh' do
       # Create '/etc/nomad-conf.d/client_connections.hcl'
       echo -e "bind_addr = \\"${IPADDRESS}\\"\\n advertise {\\n  http = \\"${IPADDRESS}\\"\\n  rpc = \\"${IPADDRESS}\\"\\n  serf = \\"${IPADDRESS}\\"\\n}"  > /etc/nomad-conf.d/connections.hcl
 
+      # Create '/etc/vault/conf.d/client_connections.hcl'
+      echo -e "listener \\"tcp\\" { address = \\"${IPADDRESS}:8200\\"\\n tls_disable = 1\\n}"  > /etc/vault/conf.d/connections.hcl
+
       if [ ! -d /mnt/dvd ]; then
         mkdir /mnt/dvd
       fi
@@ -58,6 +61,8 @@ file '/etc/init.d/provision.sh' do
 
       cp -a /mnt/dvd/unbound/. /etc/unbound.d/
 
+      cp -a /mnt/dvd/vault/vault_region.hcl /etc/vault/conf.d/region.hcl
+
       umount /dev/dvd
 
       sudo systemctl enable unbound.service
@@ -67,6 +72,9 @@ file '/etc/init.d/provision.sh' do
 
       sudo systemctl enable nomad.service
       sudo systemctl restart nomad.service
+
+      sudo systemctl enable vault.service
+      sudo systemctl restart vault.service
 
       # The next line creates an empty file so it won't run the next boot
       touch $FLAG

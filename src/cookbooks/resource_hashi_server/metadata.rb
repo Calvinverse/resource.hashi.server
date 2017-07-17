@@ -15,5 +15,6 @@ supports 'ubuntu', '>= 16.04'
 
 depends 'consul', '= 3.0.0'
 depends 'firewall', '= 2.6.1'
+depends 'hashicorp-vault', '= 2.5.0'
 depends 'nomad', '= 0.12.0'
 depends 'systemd', '= 2.1.3'
