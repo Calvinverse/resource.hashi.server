@@ -144,8 +144,15 @@
     -->
     <ItemGroup Condition=" '$(ShouldLoadPackerImagesToBuild)' == 'true' ">
         <PackerImagesToBuild
-            Condition=" '$(DirSrcPacker)' != '' "
-            Include="$(DirSrcPacker)\hyperv.json">
+            Condition=" '$(DirSrcPacker)' != '' AND '$(IsBuild)' == 'true'  "
+            Include="$(DirSrcPacker)\packer.json">
+            <Variables>
+                $(DirBuildTemp)\packer_variables.json
+            </Variables>
+        </PackerImagesToBuild>
+        <PackerImagesToBuild
+            Condition=" '$(DirTestsPacker)' != '' AND '$(IsTest)' == 'true'  "
+            Include="$(DirTestsPacker)\packer.json">
             <Variables>
                 $(DirBuildTemp)\packer_variables.json
             </Variables>
