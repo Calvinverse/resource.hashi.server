@@ -150,13 +150,6 @@
                 $(DirBuildTemp)\packer_variables.json
             </Variables>
         </PackerImagesToBuild>
-        <PackerImagesToBuild
-            Condition=" '$(DirTestsPacker)' != '' AND '$(IsTest)' == 'true'  "
-            Include="$(DirTestsPacker)\packer.json">
-            <Variables>
-                $(DirBuildTemp)\packer_variables.json
-            </Variables>
-        </PackerImagesToBuild>
     </ItemGroup>
 
 

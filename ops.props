@@ -175,6 +175,8 @@
         <!-- The directory that will contain all the temporary files needed during the build process -->
         <!-- <DirBuildTemp>$(DirBuild)\temp</DirBuildTemp> -->
         <DirBuildTempCookbooks>$(DirBuildTemp)\cookbooks</DirBuildTempCookbooks>
+        <DirBuildTempTestsIntegrationPacker>$(DirBuidTemp)\tests\integration\packer</DirBuildTempTestsIntegrationPacker>
+        <DirBuildTempTestsIntegrationPester>$(DirBuildTemp)\tests\integration\pester</DirBuildTempTestsIntegrationPester>
         <DirBuildTempVm>$(DirBuildTemp)\vm</DirBuildTempVm>
         <DirBuildTempVmBase>$(DirBuildTempVm)\base</DirBuildTempVmBase>
 
@@ -193,7 +195,10 @@
         <!-- <DirTemplates>$(DirWorkspace)\templates</DirTemplates> -->
 
         <!-- The directory that contains all the test files for the project -->
-        <!-- <DirTest>$(DirWorkspace)\tests</DirTest> -->
+        <!-- <DirTests>$(DirWorkspace)\tests</DirTests> -->
+        <DirTestsIntegration>$(DirTests)\integration</DirTestsIntegration>
+        <DirTestsIntegrationPacker>$(DirTestsIntegration)\packer</DirTestsIntegrationPacker>
+        <DirTestsIntegrationPester>$(DirTestsIntegration)\pester</DirTestsIntegrationPester>
 
         <!-- The directory that contains all the vendor cookbooks -->
         <!-- <DirVendorCookbooks>$(DirWorkspace)\berks\cookbooks</DirVendorCookbooks> -->
@@ -606,7 +611,7 @@
     -->
 
     <PropertyGroup>
-        <OpsConfigurationVersion>0.2</OpsConfigurationVersion>
+        <OpsConfigurationVersion>0.3</OpsConfigurationVersion>
     </PropertyGroup>
 
     <!--
@@ -614,7 +619,7 @@
         NuGet if no package is specified in the packages.config file.
     -->
     <PropertyGroup>
-        <PackageMinimumVersion Condition=" '$(PackageMinimumVersion)' == '' ">0.2.0</PackageMinimumVersion>
-        <PackageMaximumVersion Condition=" '$(PackageMaximumVersion)' == '' ">0.3.0</PackageMaximumVersion>
+        <PackageMinimumVersion Condition=" '$(PackageMinimumVersion)' == '' ">0.3.0</PackageMinimumVersion>
+        <PackageMaximumVersion Condition=" '$(PackageMaximumVersion)' == '' ">0.4.0</PackageMaximumVersion>
     </PropertyGroup>
 </Project>
