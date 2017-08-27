@@ -13,7 +13,7 @@ Describe 'On the system' {
 
     Context 'the administrator rights' {
         It 'should have default sudo settings' {
-            (Get-FileHash -Path /etc/sudoers -Algorithm SHA256).Hash | Should Be '9dd478d87554b22953bd54cb013fe5c33b9fbc66760c999d7dbfa79c02c0b5a5'
+            (Get-FileHash -Path /etc/sudoers -Algorithm SHA256).Hash | Should Be 'CC61F3AA6C9AF8F9540435AC280D6AD1AD0A734FDCAC6D855527F9944ABB67A3'
         }
 
         It 'should not have additional sudo files' {
