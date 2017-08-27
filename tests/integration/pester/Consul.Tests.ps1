@@ -18,37 +18,59 @@ Describe 'The consul application' {
     }
 
     Context 'has been daemonized' {
-        # Verify that the consul daemon is configured and is running
+        $serviceConfigurationPath = '/etc/systemd/system/consul.service'
+        if (-not (Test-Path $serviceConfigurationPath))
+        {
+            It 'has a systemd configuration' {
+               $false | Should Be $true
+            }
+        }
 
+        $expectedContent = @'
+[Unit]
+Description=consul
+Wants=network.target
+After=network.target
+
+[Service]
+Environment="GOMAXPROCS=2" "PATH=/usr/local/bin:/usr/bin:/bin"
+ExecStart=/opt/consul/0.8.3/consul agent -config-file=/etc/consul/consul.json -config-dir=/etc/consul/conf.d
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=TERM
+User=consul
+WorkingDirectory=/var/lib/consul
+
+[Install]
+WantedBy=multi-user.target
+
+'@
+        $serviceFileContent = Get-Content $serviceConfigurationPath | Out-String
+        $systemctlOutput = & systemctl status consul
         It 'with a systemd service' {
-            '/etc/systemd/system/consul.service' | Should Exist
+            $serviceFileContent | Should Be ($expectedContent -replace "`r", "")
 
-            <#
-            [Unit]
-            Description=consul
-            Wants=network.target
-            After=network.target
+            $systemctlOutput | Should Not Be $null
+            $systemctlOutput.GetType().FullName | Should Be 'System.Object[]'
+            $systemctlOutput.Length | Should BeGreaterThan 3
+            $systemctlOutput[0] | Should Match 'consul.service - consul'
+        }
 
-            [Service]
-            Environment="GOMAXPROCS=2" "PATH=/usr/local/bin:/usr/bin:/bin"
-            ExecStart=/opt/consul/0.8.3/consul agent -config-file=/etc/consul/consul.json -config-dir=/etc/consul/conf.d
-            ExecReload=/bin/kill -HUP $MAINPID
-            KillSignal=TERM
-            User=consul
-            WorkingDirectory=/var/lib/consul
+        It 'that is enabled' {
+            $systemctlOutput[1] | Should Match 'Loaded:\sloaded\s\(.*;\senabled;.*\)'
 
-            [Install]
-            WantedBy=multi-user.target
-            #>
         }
 
         It 'and is running' {
-
+            $systemctlOutput[2] | Should Match 'Active:\sactive\s\(running\).*'
         }
     }
 
     Context 'can be contacted' {
-        # Verify consul ports?
-        # Verify that consul is reachable from the outside
+        $response = Invoke-WebRequest -Uri http://localhost:8500/v1/agent/self -UseBasicParsing
+        $agentInformation = ConvertFrom-Json $response.Content
+        It 'responds to HTTP calls' {
+            $response.StatusCode | Should Be 200
+            $agentInformation | Should Not Be $null
+        }
     }
 }
