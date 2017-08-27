@@ -1,0 +1,4 @@
+packages/
+build/
+berks/
+src/cookbooks/resource_hashi_server/.bundle/
