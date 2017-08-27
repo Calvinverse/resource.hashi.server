@@ -15,38 +15,69 @@ Describe 'The vault application' {
     }
 
     Context 'has been daemonized' {
+        $serviceConfigurationPath = '/etc/systemd/system/vault.service'
+        if (-not (Test-Path $serviceConfigurationPath))
+        {
+            It 'has a systemd configuration' {
+               $false | Should Be $true
+            }
+        }
+
+        $expectedContent = @'
+[Unit]
+Description=Vault
+Requires=network-online.target
+After=network-online.target
+Documentation=https://vaultproject.io
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+ExecStart=/usr/local/bin/vault server -config=/etc/vault/server.hcl -config=/etc/vault/conf.d
+Restart=on-failure
+
+'@
+        $serviceFileContent = Get-Content $serviceConfigurationPath | Out-String
+        $systemctlOutput = & systemctl status vault
         It 'with a systemd service' {
-            '/etc/systemd/system/vault.service' | Should Exist
+            $serviceFileContent | Should Be ($expectedContent -replace "`r", "")
 
-            <#
+            $systemctlOutput | Should Not Be $null
+            $systemctlOutput.GetType().FullName | Should Be 'System.Object[]'
+            $systemctlOutput.Length | Should BeGreaterThan 3
+            $systemctlOutput[0] | Should Match 'vault.service - Vault'
+        }
 
-            [Unit]
-            Description=Vault
-            Requires=network-online.target
-            After=network-online.target
-            Documentation=https://vaultproject.io
+        It 'that is enabled' {
+            $systemctlOutput[1] | Should Match 'Loaded:\sloaded\s\(.*;\senabled;.*\)'
 
-            [Install]
-            WantedBy=multi-user.target
-
-            [Service]
-            ExecStart=/usr/local/bin/vault server -config=/etc/vault/server.hcl -config=/etc/vault/conf.d
-            Restart=on-failure
-
-            #>
         }
 
         It 'and is running' {
-
+            $systemctlOutput[2] | Should Match 'Active:\sactive\s\(running\).*'
         }
     }
 
     Context 'can be contacted' {
-        # Verify vault ports?
-        # Verify that vault is reachable from the outside
-    }
+        $ifConfigResponse = & ifconfig
+        $line = $ifConfigResponse[1].Trim()
+        # Expecting line to be:
+        #     inet addr:192.168.6.46  Bcast:192.168.6.255  Mask:255.255.255.0
+        $localIpAddress = $line.SubString(10, ($line.IndexOf(' ', 10) - 10))
 
-    Context 'has linked to consul' {
+        try
+        {
+            $response = Invoke-WebRequest -Uri "http://$($localIpAddress):8200/v1/sys/health" -UseBasicParsing
+        }
+        catch
+        {
+            # Because powershell sucks it throws if the response code isn't a 200 one ...
+            $response = $_.Exception.Response
+        }
 
+        It 'responds to HTTP calls' {
+            $response.StatusCode | Should Be 501
+        }
     }
 }
