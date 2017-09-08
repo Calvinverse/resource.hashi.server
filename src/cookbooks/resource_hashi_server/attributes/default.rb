@@ -85,7 +85,7 @@ default['file_name']['unbound_config_file'] = 'unbound.conf'
 # VAULT
 #
 
-default['hashicorp-vault']['version'] = '0.7.3'
+default['hashicorp-vault']['version'] = '0.8.2'
 
 default['hashicorp-vault']['config']['habackend_type'] = 'consul'
 default['hashicorp-vault']['config']['habackend_options']['address'] = '127.0.0.1:8500'
