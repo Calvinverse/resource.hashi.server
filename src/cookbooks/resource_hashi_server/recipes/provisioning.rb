@@ -26,8 +26,18 @@ file '/etc/init.d/provision.sh' do
         done< <(LANG=C /sbin/ifconfig eth0)
     }
 
+    function setHostName {
+      # Generate a 16 character password
+      POSTFIX=$(pwgen --no-capitalize 16 1)
+
+      NAME="cvhashiserver-${RESOURCE_VERSION_MAJOR}-${RESOURCE_VERSION_MINOR}-${RESOURCE_VERSION_PATCH}-${POSTFIX}"
+      sudo hostnamectl set-hostname $NAME
+    }
+
     FLAG="/var/log/firstboot.log"
     if [ ! -f $FLAG ]; then
+
+      setHostName
 
       IPADDRESS=$(getEth0Ip)
 

@@ -79,8 +79,8 @@
     -->
     <ItemGroup Condition=" '$(ShouldLoadFilesToCopy)' == 'true' ">
         <FilesToCopy
-            Exclude="$(DirSrcCookbooks)\**\metadata.rb"
-            Include="$(DirSrcCookbooks)\**\*.*">
+            Exclude="$(DirSrcCookbooks)\$(NameCookbook)\metadata.rb;$(DirSrcCookbooks)\$(NameCookbook)\attributes\resource_information.rb"
+            Include="$(DirSrcCookbooks)\$(NameCookbook)\**\*.*">
             <Destination>$(DirBuildTempCookbooks)</Destination>
         </FilesToCopy>
     </ItemGroup>
@@ -136,10 +136,15 @@
         Additional parameters can be provided through the 'TemplateTokens' ItemGroup below.
     -->
     <ItemGroup Condition=" '$(ShouldLoadBuildFilesToGenerate)' == 'true' ">
-        <BuildFilesToGenerate Include="$(DirBuildTempCookbooks)\resource_hashi_server\metadata.rb">
-            <Template>$(DirSrcCookbooks)\resource_hashi_server\metadata.rb</Template>
+        <BuildFilesToGenerate Include="$(DirBuildTempCookbooks)\$(NameCookbook)\metadata.rb">
+            <Template>$(DirSrcCookbooks)\$(NameCookbook)\metadata.rb</Template>
             <Encoding></Encoding>
         </BuildFilesToGenerate>
+        <BuildFilesToGenerate Include="$(DirBuildTempCookbooks)\$(NameCookbook)\attributes\resource_information.rb">
+            <Template>$(DirSrcCookbooks)\$(NameCookbook)\attributes\resource_information.rb</Template>
+            <Encoding></Encoding>
+        </BuildFilesToGenerate>
+
         <BuildFilesToGenerate Include="$(DirBuildTemp)\packer_variables.json">
             <Template>$(DirSrcPacker)\packer_variables.json</Template>
             <Encoding></Encoding>
