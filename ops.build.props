@@ -79,7 +79,7 @@
         <FilesToCopy
             Exclude="$(DirSrcCookbooks)\$(NameCookbook)\metadata.rb;$(DirSrcCookbooks)\$(NameCookbook)\attributes\resource_information.rb"
             Include="$(DirSrcCookbooks)\$(NameCookbook)\**\*.*">
-            <Destination>$(DirBuildTempCookbooks)</Destination>
+            <Destination>$(DirBuildTempCookbooks)\$(NameCookbook)</Destination>
         </FilesToCopy>
     </ItemGroup>
     <ItemGroup Condition=" '$(ShouldLoadNuGetFilesToCopy)' == 'true' ">
