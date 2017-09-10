@@ -463,7 +463,7 @@
         The collection of cookbooks that should be analyzed with Foodcritic
     -->
     <ItemGroup Condition=" '$(ShouldLoadChefCookbooksToAnalyze)' == 'true' ">
-        <ChefCookbooksToAnalyze Include="$(DirBuildTempCookbooks)\resource_hashi_server" >
+        <ChefCookbooksToAnalyze Include="$(DirBuildTempCookbooks)\$(NameCookbook)" >
             <!--
                 Ignore:
                 FC071 - Missing LICENSE file: because it's there, just not in the expected directory
@@ -480,7 +480,7 @@
         The collection of cookbooks that should be tested with ChefSpec.
     -->
     <ItemGroup Condition=" '$(ShouldLoadChefCookbooksToTest)' == 'true' ">
-        <ChefCookbooksToTest Include="$(DirBuildTempCookbooks)\resource_hashi_server">
+        <ChefCookbooksToTest Include="$(DirBuildTempCookbooks)\$(NameCookbook)">
             <ChefSpecPattern>./spec/*_spec.rb</ChefSpecPattern>
         </ChefCookbooksToTest>
     </ItemGroup>
