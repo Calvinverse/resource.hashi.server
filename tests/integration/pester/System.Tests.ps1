@@ -1,7 +1,7 @@
 Describe 'On the system' {
     Context 'the machine name' {
         It 'should not be the test name' {
-            hostname | Should Not Be '${ImageNameWithoutSpaces}'
+            hostname | Should Not Be '${ImageName}'
         }
     }
 
