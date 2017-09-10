@@ -131,18 +131,11 @@ file '/etc/init.d/provision.sh' do
       eject -T /dev/dvd
 
       #
-      # RESTART SERVICES
+      # ENABLE SERVICES
       #
       sudo systemctl enable unbound.service
-      #sudo systemctl restart unbound.service
-
-      #sudo systemctl restart consul.service
-
       sudo systemctl enable nomad.service
-      #sudo systemctl restart nomad.service
-
       sudo systemctl enable vault.service
-      #sudo systemctl restart vault.service
 
       # The next line creates an empty file so it won't run the next boot
       touch $FLAG
