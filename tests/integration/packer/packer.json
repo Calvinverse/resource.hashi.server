@@ -48,7 +48,7 @@
         {
             "expect_disconnect" : true,
             "inline": [
-                "echo \"Waiting for reboot after provisioning ...\""
+                "echo \"Waited for reboot after provisioning ...\""
             ],
             "pause_before" : "30s",
             "type": "shell"
