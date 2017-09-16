@@ -162,6 +162,7 @@ file '/etc/systemd/system/provision.service' do
     Type=oneshot
     ExecStart=/etc/init.d/provision.sh
     RemainAfterExit=true
+    EnvironmentFile=-/etc/environment
 
     [Install]
     WantedBy=network-online.target
