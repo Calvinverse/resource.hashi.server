@@ -204,6 +204,10 @@
         <!-- <DirVendorCookbooks>$(DirWorkspace)\berks\cookbooks</DirVendorCookbooks> -->
     </PropertyGroup>
 
+    <PropertyGroup>
+        <NameCookbook>resource_hashi_server</NameCookbook>
+    </PropertyGroup>
+
     <!--
         Global files
     -->
@@ -227,8 +231,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <VersionUbuntu>16.04.1</VersionUbuntu>
-        <VersionLinuxBaseResource>0.1.0</VersionLinuxBaseResource>
+        <VersionLinuxBaseResource>0.1.2</VersionLinuxBaseResource>
     </PropertyGroup>
 
 
@@ -280,7 +283,7 @@
         The collection of cookbooks for which the dependencies should be restored with Berkshelf
     -->
     <ItemGroup Condition=" '$(ShouldLoadChefCookbooksToRestore)' == 'true' ">
-        <ChefCookbooksToRestore Include="$(DirBuildTempCookbooks)\resource_hashi_server" />
+        <ChefCookbooksToRestore Include="$(DirBuildTempCookbooks)\$(NameCookbook)" />
     </ItemGroup>
 
 
@@ -518,7 +521,7 @@
         <!-- <TemplateTokenGenerators>UNDEFINED</TemplateTokenGenerators> -->
     </PropertyGroup>
     <PropertyGroup>
-        <LinuxImage Condition=" '$(LinuxImage)' == '' ">resource.hashi.server-ubuntu1604</LinuxImage>
+        <LinuxImage Condition=" '$(LinuxImage)' == '' ">resource.hashi.server</LinuxImage>
     </PropertyGroup>
 
     <!--
@@ -607,6 +610,12 @@
             The full path to the berkshelf application. If not defined the Gems bin directory is searched.
         -->
         <ToolsExternalBerkshelfPath>berks</ToolsExternalBerkshelfPath>
+
+        <!--
+            The full path and version to the packer command line executable. If not defined the packages directory is searched.
+        -->
+        <ToolsExternalPackerPath>UNDEFINED</ToolsExternalPackerPath>
+        <ToolsExternalPackerVersion>1.2.0</ToolsExternalPackerVersion>
     </PropertyGroup>
 
 

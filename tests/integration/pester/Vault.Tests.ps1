@@ -60,7 +60,7 @@ Restart=on-failure
     }
 
     Context 'can be contacted' {
-        $ifConfigResponse = & ifconfig
+        $ifConfigResponse = & ifconfig eth0
         $line = $ifConfigResponse[1].Trim()
         # Expecting line to be:
         #     inet addr:192.168.6.46  Bcast:192.168.6.255  Mask:255.255.255.0

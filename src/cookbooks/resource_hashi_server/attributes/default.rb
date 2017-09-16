@@ -4,7 +4,7 @@
 # CONSUL
 #
 
-default['consul']['version'] = '0.8.3'
+default['consul']['version'] = '0.9.2'
 default['consul']['config']['domain'] = 'consulverse'
 
 # This is not a consul server node
@@ -38,7 +38,7 @@ default['consul']['config']['dns_config'] = {
 default['consul']['config']['leave_on_terminate'] = true
 
 # Send all logs to syslog
-default['consul']['config']['log_level'] = 'DEBUG'
+default['consul']['config']['log_level'] = 'INFO'
 default['consul']['config']['enable_syslog'] = true
 
 default['consul']['config']['owner'] = 'root'
@@ -63,6 +63,9 @@ default['firewall']['ipv6_enabled'] = false
 # NOMAD
 #
 
+default['nomad']['package'] = '0.6.2/nomad_0.6.2_linux_amd64.zip'
+default['nomad']['checksum'] = 'fbcb19a848fab36e86ed91bb66a1602cdff5ea7074a6d00162b96103185827b4'
+
 #
 # PROVISIONING
 #
@@ -82,7 +85,7 @@ default['file_name']['unbound_config_file'] = 'unbound.conf'
 # VAULT
 #
 
-default['hashicorp-vault']['version'] = '0.7.3'
+default['hashicorp-vault']['version'] = '0.8.2'
 
 default['hashicorp-vault']['config']['habackend_type'] = 'consul'
 default['hashicorp-vault']['config']['habackend_options']['address'] = '127.0.0.1:8500'

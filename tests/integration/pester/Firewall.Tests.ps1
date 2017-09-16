@@ -45,6 +45,10 @@ Describe 'The firewall' {
         It 'on port 4647' {
             ($ufwOutput | Where-Object {$_ -match '(4647)\s*(ALLOW)\s*(Anywhere)'} ) | Should Not Be ''
         }
+
+        It 'on port 4648' {
+            ($ufwOutput | Where-Object {$_ -match '(4647)\s*(ALLOW)\s*(Anywhere)'} ) | Should Not Be ''
+        }
     }
 
     Context 'should allow vault' {
