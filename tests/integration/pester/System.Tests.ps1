@@ -1,7 +1,29 @@
 Describe 'On the system' {
     Context 'the machine name' {
-        It 'should not be the test name' {
-            hostname | Should Not Be '${ImageName}'
+        It 'should be a generated name with containing the version number and random characters' {
+            hostname | Should Match '^(cvhashiserver.*)-\d{1,2}-\d{1,3}-\d{1,3}-.{16}$'
+        }
+    }
+
+    Context 'the environment variables' {
+        It 'should have a product name environment variable' {
+            $env:RESOURCE_NAME | Should Be '${ProductName}'
+        }
+
+        It 'should have an environment variable for the major version' {
+            $env:RESOURCE_VERSION_MAJOR | Should Be '${VersionMajor}'
+        }
+
+        It 'should have an environment variable for the minor version' {
+            $env:RESOURCE_VERSION_MINOR | Should Be '${VersionMinor}'
+        }
+
+        It 'should have an environment variable for the patch version' {
+            $env:RESOURCE_VERSION_PATCH | Should Be '${VersionPatch}'
+        }
+
+        It 'should have an environment variable for the semantic version' {
+            $env:RESOURCE_VERSION_SEMANTIC | Should Be '${VersionSemantic}'
         }
     }
 
