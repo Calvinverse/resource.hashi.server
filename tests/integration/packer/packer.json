@@ -14,7 +14,7 @@
     },
     "builders": [
         {
-            "boot_wait": "5s",
+            "boot_wait": "30s",
             "boot_command": [],
             "clone_from_vmxc_path": "{{ user `dir_temp` }}/{{ user `vm_name` }}",
             "communicator": "ssh",
@@ -39,13 +39,20 @@
             "ssh_timeout": "4h",
             "ssh_username": "{{user `admin_username`}}",
             "switch_name": "{{user `vm_switch_name`}}",
-            "switch_vlan_id": "{{ user `vm_switch_vlan` }}",
             "type": "hyperv-vmcx",
             "vlan_id": "{{ user `vm_switch_vlan` }}",
             "vm_name": "test-{{ user `vm_name` }}"
         }
     ],
     "provisioners": [
+        {
+            "expect_disconnect" : true,
+            "inline": [
+                "echo \"Waited for reboot after provisioning ...\""
+            ],
+            "pause_before" : "30s",
+            "type": "shell"
+        },
         {
             "destination": "/tmp/pester",
             "source": "{{ user `dir_temp` }}/tests/integration/pester",

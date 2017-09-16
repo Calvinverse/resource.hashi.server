@@ -34,7 +34,7 @@ After=network.target
 
 [Service]
 Environment="GOMAXPROCS=2" "PATH=/usr/local/bin:/usr/bin:/bin"
-ExecStart=/opt/consul/0.8.3/consul agent -config-file=/etc/consul/consul.json -config-dir=/etc/consul/conf.d
+ExecStart=/opt/consul/0.9.2/consul agent -config-file=/etc/consul/consul.json -config-dir=/etc/consul/conf.d
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=TERM
 User=consul
