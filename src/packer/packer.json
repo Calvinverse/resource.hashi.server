@@ -6,6 +6,7 @@
         "dir_cookbooks_src": "src/cookbooks",
         "dir_cookbooks_vendors": "packages/vendor/cookbooks",
         "dir_http_user": null,
+        "dir_src_provisioning": "src/provisioning",
         "dir_temp": null,
         "dir_vm_import": null,
 
@@ -45,16 +46,26 @@
     ],
     "provisioners": [
         {
-            "execute_command": "echo '{{ user `admin_password` }}' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
-            "inline": [
-                "echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
-            ],
-            "type": "shell"
+            "command": "Set-VM -Name {{ user `vm_name` }} -AutomaticCheckpointsEnabled $false",
+            "execute_command": ["Powershell.exe", "-NonInteractive", "-NoLogo", "-NoProfile", "-Command", "{{.Command}}"],
+            "type": "shell-local"
+        },
+        {
+            "command": "Get-VMSnapshot -VMName {{ user `vm_name` }} | Remove-VMSnapshot",
+            "execute_command": ["Powershell.exe", "-NonInteractive", "-NoLogo", "-NoProfile", "-Command", "{{.Command}}"],
+            "type": "shell-local"
+        },
+        {
+            "destination": "/tmp/unbound_zones.conf",
+            "source": "{{ user `dir_src_provisioning` }}/unbound_zones.conf",
+            "type": "file"
         },
         {
             "expect_disconnect": false,
             "inline": [
-                "sudo -S -E apt-get install --assume-yes curl"
+                "dos2unix /tmp/unbound_zones.conf",
+                "sudo cp -a /tmp/unbound_zones.conf /etc/unbound.d/unbound_zones.conf",
+                "sudo systemctl restart unbound"
             ],
             "type": "shell"
         },
@@ -69,6 +80,14 @@
                 "resource_hashi_server::default"
             ],
             "type": "chef-solo"
+        },
+        {
+            "expect_disconnect": false,
+            "inline": [
+                "sudo dpkg -P chef",
+                "sudo rm -rf /etc/unbound.d/unbound_zones"
+            ],
+            "type": "shell"
         }
     ]
 }
