@@ -44,7 +44,7 @@ default['nomad']['server_file'] = 'server.hcl'
 # VAULT
 #
 
-default['hashicorp-vault']['version'] = '0.8.2'
+default['hashicorp-vault']['version'] = '0.9.1'
 
 default['hashicorp-vault']['config']['habackend_type'] = 'consul'
 default['hashicorp-vault']['config']['habackend_options']['address'] = '127.0.0.1:8500'
