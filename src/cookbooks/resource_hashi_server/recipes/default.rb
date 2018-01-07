@@ -18,9 +18,7 @@ end
 
 include_recipe 'resource_hashi_server::firewall'
 
-include_recipe 'resource_hashi_server::consul'
 include_recipe 'resource_hashi_server::meta'
-include_recipe 'resource_hashi_server::network'
 include_recipe 'resource_hashi_server::nomad'
 include_recipe 'resource_hashi_server::provisioning'
 include_recipe 'resource_hashi_server::vault'
