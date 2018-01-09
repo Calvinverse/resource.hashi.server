@@ -5,13 +5,12 @@
         <file src="${DirTestsIntegration}\provision\ubuntu\*.*" target="" />
 
         <file src="${DirTestsIntegration}\provision\shared\consul\*.*" target="consul" />
-        <file src="${DirTestsIntegration}\provision\shared\consul\server\*.*" target="consul\server" />
+        <file src="${DirTestsIntegration}\provision\shared\consul\client\*.*" target="consul\client" />
 
-        <file src="${DirTestsIntegration}\provision\shared\nomad\*.*" target="nomad" />
-        <file src="${DirTestsIntegration}\provision\shared\nomad\server\*.*" target="nomad\server" />
+        <file src="${DirTestsIntegration}\provision\shared\consul-template\*.*" target="consul-template" />
 
         <file src="${DirTestsIntegration}\provision\shared\unbound\*.*" target="unbound" />
 
-        <file src="${DirTestsIntegration}\provision\shared\vault\*.*" target="vault" />
+        <file src="${DirTestsIntegration}\provision\shared\*.json" target="" />
     </files>
 </iso>
