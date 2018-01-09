@@ -123,7 +123,7 @@ file "#{consul_template_template_path}/#{nomad_metrics_template_file}" do
     telemetry {
         publish_allocation_metrics = true
         publish_node_metrics       = true
-        statsd_address = "{{ keyOrDefault "config/services/metrics/statsd/host" "unknown" }}.service.{{ keyOrDefault "config/services/consul/domain" "consul" }}:{{ keyOrDefault "config/services/metrics/statsd/port" "80" }}"
+        statsd_address = "{{ keyOrDefault "config/services/metrics/protocols/statsd/host" "unknown" }}.service.{{ keyOrDefault "config/services/consul/domain" "consul" }}:{{ keyOrDefault "config/services/metrics/protocols/statsd/port" "80" }}"
     }
   CONF
   mode '755'

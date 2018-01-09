@@ -99,7 +99,7 @@ describe 'resource_hashi_server::nomad' do
       telemetry {
           publish_allocation_metrics = true
           publish_node_metrics       = true
-          statsd_address = "{{ keyOrDefault "config/services/metrics/statsd/host" "unknown" }}.service.{{ keyOrDefault "config/services/consul/domain" "consul" }}:{{ keyOrDefault "config/services/metrics/statsd/port" "80" }}"
+          statsd_address = "{{ keyOrDefault "config/services/metrics/protocols/statsd/host" "unknown" }}.service.{{ keyOrDefault "config/services/consul/domain" "consul" }}:{{ keyOrDefault "config/services/metrics/protocols/statsd/port" "80" }}"
       }
     CONF
     it 'creates nomad metrics template file in the consul-template template directory' do

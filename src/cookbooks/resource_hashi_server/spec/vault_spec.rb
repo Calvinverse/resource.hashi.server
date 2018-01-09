@@ -66,7 +66,7 @@ describe 'resource_hashi_server::vault' do
 
     vault_metrics_template_content = <<~CONF
       telemetry {
-          statsd_address = "{{ keyOrDefault "config/services/metrics/statsd/host" "unknown" }}.service.{{ keyOrDefault "config/services/consul/domain" "consul" }}:{{ keyOrDefault "config/services/metrics/statsd/port" "80" }}"
+          statsd_address = "{{ keyOrDefault "config/services/metrics/protocols/statsd/host" "unknown" }}.service.{{ keyOrDefault "config/services/consul/domain" "consul" }}:{{ keyOrDefault "config/services/metrics/protocols/statsd/port" "80" }}"
       }
     CONF
     it 'creates vault metrics template file in the consul-template template directory' do
