@@ -72,14 +72,4 @@ Describe 'The firewall' {
             ($ufwOutput | Where-Object {$_ -match '(53/udp)\s*(ALLOW)\s*(Anywhere)'} ) | Should Not Be $null
         }
     }
-
-    Context 'should allow vault' {
-        It 'on port 8200'{
-            ($ufwOutput | Where-Object {$_ -match '(8200/tcp)\s*(ALLOW)\s*(Anywhere)'} ) | Should Not Be $null
-        }
-
-        It 'on port 8201' {
-            ($ufwOutput | Where-Object {$_ -match '(8201/tcp)\s*(ALLOW)\s*(Anywhere)'} ) | Should Not Be $null
-        }
-    }
 }
