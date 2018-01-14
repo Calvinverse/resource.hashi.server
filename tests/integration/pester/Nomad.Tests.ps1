@@ -4,14 +4,15 @@ Describe 'The nomad application' {
             '/usr/local/bin/nomad' | Should Exist
         }
 
-        It 'with default configuration in /etc/nomad-conf.d/server.hcl' {
-            '/etc/nomad-conf.d/server.hcl' | Should Exist
+        It 'with default configuration in /etc/nomad-conf.d/base.hcl' {
+            '/etc/nomad-conf.d/base.hcl' | Should Exist
         }
 
         It 'with environment configuration in /etc/nomad-conf.d' {
-            '/etc/nomad-conf.d/bootstrap.hcl' | Should Exist
-            '/etc/nomad-conf.d/connections.hcl' | Should Exist
+            '/etc/nomad-conf.d/metrics.hcl' | Should Exist
             '/etc/nomad-conf.d/region.hcl' | Should Exist
+            '/etc/nomad-conf.d/secrets.hcl' | Should Exist
+            '/etc/nomad-conf.d/server.hcl' | Should Exist
         }
     }
 
