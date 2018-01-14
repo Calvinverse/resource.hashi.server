@@ -10,17 +10,65 @@ function Get-IpAddress
     return $line.SubString(0, $line.IndexOf(' '))
 }
 
-function Set-ConsulKV
+function Initialize-Environment
 {
     $consulVersion = '1.0.2'
+    Start-TestConsul -consulVersion $consulVersion
 
-    Write-Output "Starting consul ..."
-    $process = Start-Process -FilePath "/opt/consul/$($consulVersion)/consul" -ArgumentList "agent -config-file /test/pester/consul/server.json" -PassThru -RedirectStandardOutput /test/pester/consul/consuloutput.out -RedirectStandardError /test/pester/consul/consulerror.out
+    Install-Vault -vaultVersion '0.9.1'
+    Start-TestVault
 
-    Write-Output "Going to sleep for 10 seconds ..."
+    Write-Output "Waiting for 10 seconds for consul and vault to start ..."
     Start-Sleep -Seconds 10
 
-    Write-Output "Setting consul key-values ..."
+    Join-Cluster -consulVersion $consulVersion
+
+    Set-VaultSecrets
+    Set-ConsulKV -consulVersion $consulVersion
+
+    Write-Output "Giving consul-template 30 seconds to process the data ..."
+    Start-Sleep -Seconds 30
+}
+
+function Install-Vault
+{
+    [CmdletBinding()]
+    param(
+        [string] $vaultVersion
+    )
+
+    & wget "https://releases.hashicorp.com/vault/$($vaultVersion)/vault_$($vaultVersion)_linux_amd64.zip" --silent --output /test/vault.zip
+    & unzip /test/vault.zip -d /test/vault
+}
+
+function Join-Cluster
+{
+    [CmdletBinding()]
+    param(
+        [string] $consulVersion
+    )
+
+    Write-Output "Joining the local consul ..."
+
+    # connect to the actual local consul instance
+    $ipAddress = Get-IpAddress
+    Write-Output "Joining: $($ipAddress):8351"
+
+    Start-Process -FilePath "/opt/consul/$($consulVersion)/consul" -ArgumentList "join $($ipAddress):8351"
+
+    Write-Output "Getting members for client"
+    & /opt/consul/$($consulVersion)/consul members
+
+    Write-Output "Getting members for server"
+    & /opt/consul/$($consulVersion)/consul members -http-addr=http://127.0.0.1:8550
+}
+
+function Set-ConsulKV
+{
+    [CmdletBinding()]
+    param(
+        [string] $consulVersion
+    )
 
     # Load config/services/consul
     & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/consul/datacenter 'test-integration'
@@ -33,7 +81,7 @@ function Set-ConsulKV
     & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/metrics/protocols/statsd/port '1234'
 
     # Load config/services/nomad
-    & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/nomad/bootstrap '2'
+    & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/nomad/bootstrap '1'
     & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/nomad/protocols/http/tls 'false'
     & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/nomad/protocols/rpc/tls 'false'
     & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/nomad/region 'integrationtest'
@@ -49,21 +97,39 @@ function Set-ConsulKV
 
     & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/queue/logs/syslog/username 'testuser'
     & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/queue/logs/syslog/vhost 'testlogs'
+}
 
-    Write-Output "Joining the local consul ..."
+function Set-VaultSecrets
+{
+    Write-Output 'Setting vault secrets ...'
 
-    # connect to the actual local consul instance
-    $ipAddress = Get-IpAddress
-    Write-Output "Joining: $($ipAddress):8351"
+    # secret/services/queue/logs/syslog
 
-    Start-Process -FilePath "/opt/consul/$($consulVersion)/consul" -ArgumentList "join $($ipAddress):8351"
+    # secret/services/nomad/encrypt
 
-    Write-Output "Getting members for client"
-    & /opt/consul/$($consulVersion)/consul members
+    # secret/services/nomad/token
+}
 
-    Write-Output "Getting members for server"
-    & /opt/consul/$($consulVersion)/consul members -http-addr=http://127.0.0.1:8550
+function Start-TestConsul
+{
+    [CmdletBinding()]
+    param(
+        [string] $consulVersion
+    )
 
-    Write-Output "Giving consul-template 30 seconds to process the data ..."
-    Start-Sleep -Seconds 30
+    Write-Output "Starting consul ..."
+    $process = Start-Process -FilePath "/opt/consul/$($consulVersion)/consul" -ArgumentList "agent -config-file /test/pester/consul/server.json" -PassThru -RedirectStandardOutput /test/pester/consul/consuloutput.out -RedirectStandardError /test/pester/consul/consulerror.out
+
+    Write-Output "Going to sleep for 10 seconds ..."
+    Start-Sleep -Seconds 10
+}
+
+function Start-TestVault
+{
+    [CmdletBinding()]
+    param(
+    )
+
+    Write-Output "Starting vault ..."
+    $process = Start-Process -FilePath "/test/vault/vault" -ArgumentList "-dev" -PassThru -RedirectStandardOutput /test/vault/vaultoutput.out -RedirectStandardError /test/vault/vaulterror.out
 }

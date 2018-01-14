@@ -1,6 +1,4 @@
 {
-    "bootstrap_expect": 2,
-
     "datacenter": "test-integration",
     "domain": "integrationtest",
 
@@ -20,5 +18,5 @@
         "server" : 8350
     },
 
-    "server": true
+    "server": false
 }
