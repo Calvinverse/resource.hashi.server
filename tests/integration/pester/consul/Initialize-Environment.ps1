@@ -80,14 +80,14 @@ function Set-ConsulKV
     & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/metrics/protocols/statsd/host 'statsd.metrics'
     & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/metrics/protocols/statsd/port '1234'
 
-    # Load config/services/nomad
-    & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/nomad/bootstrap '1'
-    & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/nomad/protocols/http/tls 'false'
-    & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/nomad/protocols/rpc/tls 'false'
-    & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/nomad/region 'integrationtest'
-    & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/nomad/tls/verify 'false'
-    & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/nomad/vault/enabled 'false'
-    & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/nomad/vault/ts/skip 'true'
+    # Load config/services/jobs
+    & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/jobs/bootstrap '1'
+    & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/jobs/protocols/http/tls 'false'
+    & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/jobs/protocols/rpc/tls 'false'
+    & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/jobs/region 'integrationtest'
+    & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/jobs/tls/verify 'false'
+    & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/jobs/vault/enabled 'false'
+    & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/jobs/vault/ts/skip 'true'
 
     # load config/services/queue
     & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/queue/protocols/http/host 'http.queue'

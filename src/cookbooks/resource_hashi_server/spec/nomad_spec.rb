@@ -20,6 +20,7 @@ describe 'resource_hashi_server::nomad' do
         auto_advertise = true
         client_auto_join = true
         server_auto_join = true
+        server_service_name = jobs
       }
 
       data_dir = "/var/lib/nomad"
