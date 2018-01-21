@@ -11,7 +11,7 @@ Describe 'The nomad application' {
         It 'with environment configuration in /etc/nomad-conf.d' {
             '/etc/nomad-conf.d/metrics.hcl' | Should Exist
             '/etc/nomad-conf.d/region.hcl' | Should Exist
-            '/etc/nomad-conf.d/secrets.hcl' | Should Exist
+            # '/etc/nomad-conf.d/secrets.hcl' | Should Exist
             '/etc/nomad-conf.d/server.hcl' | Should Exist
         }
     }
@@ -77,14 +77,10 @@ Restart=on-failure
     }
 
     Context 'has linked to consul' {
-        $response = Invoke-WebRequest -Uri http://localhost:8500/v1/agent/services -UseBasicParsing
-        $serviceInformation = ConvertFrom-Json $response.Content
+        $services = /opt/consul/1.0.2/consul catalog services -tags
         It 'with the expected nomad services' {
-            $response.StatusCode | Should Be 200
-            $serviceInformation | Should Not Be $null
-            $serviceInformation.'_nomad-server-nomad-http' | Should Not Be $null
-            $serviceInformation.'_nomad-server-nomad-rpc' | Should Not Be $null
-            $serviceInformation.'_nomad-server-nomad-serf' | Should Not Be $null
+            $services[0] | Should Match 'consul'
+            $services[1] | Should Match 'jobs\s*http,rpc,serf'
         }
     }
 }

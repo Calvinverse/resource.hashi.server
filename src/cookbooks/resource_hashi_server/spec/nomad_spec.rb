@@ -7,10 +7,6 @@ describe 'resource_hashi_server::nomad' do
     let(:chef_run) { ChefSpec::SoloRunner.converge(described_recipe) }
 
     nomad_client_config_content = <<~HCL
-      atlas {
-        join = false
-      }
-
       client {
         enabled = false
       }
@@ -20,7 +16,7 @@ describe 'resource_hashi_server::nomad' do
         auto_advertise = true
         client_auto_join = true
         server_auto_join = true
-        server_service_name = jobs
+        server_service_name = "jobs"
       }
 
       data_dir = "/var/lib/nomad"
@@ -258,6 +254,14 @@ describe 'resource_hashi_server::nomad' do
     end
 
     nomad_secrets_template_content = <<~CONF
+      server {
+      {{ with secret "secret/services/nomad/encrypt"}}
+        {{ if .Data.password }}
+          encrypt = "{{ .Data.password }}"
+        {{ end }}
+      {{ end }}
+      }
+
       vault {
           ca_path = "/etc/certs/ca"
           cert_file = "/var/certs/vault.crt"
@@ -374,11 +378,6 @@ describe 'resource_hashi_server::nomad' do
     nomad_server_template_content = <<~CONF
       server {
           bootstrap_expect = {{ keyOrDefault "config/services/nomad/bootstrap" "1" }}
-      {{ with secret "secret/services/nomad/encrypt"}}
-        {{ if .Data.password }}
-          encrypt = "{{ .Data.password }}"
-        {{ end }}
-      {{ end }}
       }
     CONF
     it 'creates nomad server template file in the consul-template template directory' do

@@ -17,10 +17,6 @@ end
 file "#{Nomad::Helpers::CONFIG_ROOT}/base.hcl" do
   action :create
   content <<~HCL
-    atlas {
-      join = false
-    }
-
     client {
       enabled = false
     }
@@ -30,7 +26,7 @@ file "#{Nomad::Helpers::CONFIG_ROOT}/base.hcl" do
       auto_advertise = true
       client_auto_join = true
       server_auto_join = true
-      server_service_name = jobs
+      server_service_name = "jobs"
     }
 
     data_dir = "/var/lib/nomad"
@@ -288,6 +284,14 @@ nomad_secrets_template_file = node['nomad']['consul_template_secrets_file']
 file "#{consul_template_template_path}/#{nomad_secrets_template_file}" do
   action :create
   content <<~CONF
+    server {
+    {{ with secret "secret/services/nomad/encrypt"}}
+      {{ if .Data.password }}
+        encrypt = "{{ .Data.password }}"
+      {{ end }}
+    {{ end }}
+    }
+
     vault {
         ca_path = "/etc/certs/ca"
         cert_file = "/var/certs/vault.crt"
@@ -407,11 +411,6 @@ file "#{consul_template_template_path}/#{nomad_server_template_file}" do
   content <<~CONF
     server {
         bootstrap_expect = {{ keyOrDefault "config/services/nomad/bootstrap" "1" }}
-    {{ with secret "secret/services/nomad/encrypt"}}
-      {{ if .Data.password }}
-        encrypt = "{{ .Data.password }}"
-      {{ end }}
-    {{ end }}
     }
   CONF
   mode '755'
