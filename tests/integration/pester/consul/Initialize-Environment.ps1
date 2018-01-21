@@ -1,5 +1,7 @@
 function Get-IpAddress
 {
+    $ErrorActionPreference = 'Stop'
+
     $output = & /sbin/ifconfig eth0
     $line = $output |
         Where-Object { $_.Contains('inet addr:') } |
@@ -12,22 +14,46 @@ function Get-IpAddress
 
 function Initialize-Environment
 {
-    $consulVersion = '1.0.2'
-    Start-TestConsul -consulVersion $consulVersion
+    $ErrorActionPreference = 'Stop'
 
-    Install-Vault -vaultVersion '0.9.1'
-    Start-TestVault
+    try
+    {
+        $consulVersion = '1.0.2'
+        Start-TestConsul -consulVersion $consulVersion
 
-    Write-Output "Waiting for 10 seconds for consul and vault to start ..."
-    Start-Sleep -Seconds 10
+        Install-Vault -vaultVersion '0.9.1'
+        Start-TestVault
 
-    Join-Cluster -consulVersion $consulVersion
+        Write-Output "Waiting for 10 seconds for consul and vault to start ..."
+        Start-Sleep -Seconds 10
 
-    Set-VaultSecrets
-    Set-ConsulKV -consulVersion $consulVersion
+        Join-Cluster -consulVersion $consulVersion
 
-    Write-Output "Giving consul-template 30 seconds to process the data ..."
-    Start-Sleep -Seconds 30
+        Set-VaultSecrets
+        Set-ConsulKV -consulVersion $consulVersion
+
+        Write-Output "Giving consul-template 30 seconds to process the data ..."
+        Start-Sleep -Seconds 30
+    }
+    catch
+    {
+        $currentErrorActionPreference = $ErrorActionPreference
+        $ErrorActionPreference = 'Continue'
+
+        try
+        {
+            Write-Error $errorRecord.Exception
+            Write-Error $errorRecord.ScriptStackTrace
+            Write-Error $errorRecord.InvocationInfo.PositionMessage
+        }
+        finally
+        {
+            $ErrorActionPreference = $currentErrorActionPreference
+        }
+
+        # rethrow the error
+        throw $_.Exception
+    }
 }
 
 function Install-Vault
@@ -37,7 +63,9 @@ function Install-Vault
         [string] $vaultVersion
     )
 
-    & wget "https://releases.hashicorp.com/vault/$($vaultVersion)/vault_$($vaultVersion)_linux_amd64.zip" --silent --output /test/vault.zip
+    $ErrorActionPreference = 'Stop'
+
+    & wget "https://releases.hashicorp.com/vault/$($vaultVersion)/vault_$($vaultVersion)_linux_amd64.zip" --output-document /test/vault.zip
     & unzip /test/vault.zip -d /test/vault
 }
 
@@ -47,6 +75,8 @@ function Join-Cluster
     param(
         [string] $consulVersion
     )
+
+    $ErrorActionPreference = 'Stop'
 
     Write-Output "Joining the local consul ..."
 
@@ -70,6 +100,8 @@ function Set-ConsulKV
         [string] $consulVersion
     )
 
+    $ErrorActionPreference = 'Stop'
+
     # Load config/services/consul
     & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/consul/datacenter 'test-integration'
     & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/consul/domain 'integrationtest'
@@ -78,7 +110,7 @@ function Set-ConsulKV
     & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/metrics/protocols/opentsdb/host 'opentsdb.metrics'
     & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/metrics/protocols/opentsdb/port '4242'
     & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/metrics/protocols/statsd/host 'statsd.metrics'
-    & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/metrics/protocols/statsd/port '1234'
+    & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/metrics/protocols/statsd/port '8125'
 
     # Load config/services/jobs
     & /opt/consul/$($consulVersion)/consul kv put -http-addr=http://127.0.0.1:8550 config/services/jobs/bootstrap '1'
@@ -118,10 +150,12 @@ function Start-TestConsul
     )
 
     Write-Output "Starting consul ..."
-    $process = Start-Process -FilePath "/opt/consul/$($consulVersion)/consul" -ArgumentList "agent -config-file /test/pester/consul/server.json" -PassThru -RedirectStandardOutput /test/pester/consul/consuloutput.out -RedirectStandardError /test/pester/consul/consulerror.out
-
-    Write-Output "Going to sleep for 10 seconds ..."
-    Start-Sleep -Seconds 10
+    $process = Start-Process `
+        -FilePath "/opt/consul/$($consulVersion)/consul" `
+        -ArgumentList "agent -config-file /test/pester/consul/client.json" `
+        -PassThru `
+        -RedirectStandardOutput /test/pester/consul/consuloutput.out `
+        -RedirectStandardError /test/pester/consul/consulerror.out
 }
 
 function Start-TestVault
@@ -130,6 +164,14 @@ function Start-TestVault
     param(
     )
 
+    $ErrorActionPreference = 'Stop'
+
     Write-Output "Starting vault ..."
-    $process = Start-Process -FilePath "/test/vault/vault" -ArgumentList "-dev" -PassThru -RedirectStandardOutput /test/vault/vaultoutput.out -RedirectStandardError /test/vault/vaulterror.out
+    $process = Start-Process `
+        -FilePath "/test/vault/vault" `
+        -ArgumentList "-dev" `
+        -PassThru `
+        -RedirectStandardOutput /test/vault/vaultoutput.out `
+        -RedirectStandardError /test/vault/vaulterror.out
 }
+
