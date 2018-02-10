@@ -2,3 +2,4 @@ packages/
 build/
 berks/
 src/cookbooks/resource_hashi_server/.bundle/
+src/cookbooks/resource_hashi_server/Gemfile.lock
