@@ -66,7 +66,7 @@ file "#{Nomad::Helpers::CONFIG_ROOT}/#{nomad_metrics_file}" do
     telemetry {
         publish_allocation_metrics = true
         publish_node_metrics       = true
-        statsd_address = "localhost:8125"
+        statsd_address = "127.0.0.1:8125"
     }
   CONF
   mode '755'

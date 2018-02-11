@@ -43,7 +43,7 @@ describe 'resource_hashi_server::nomad' do
       telemetry {
           publish_allocation_metrics = true
           publish_node_metrics       = true
-          statsd_address = "localhost:8125"
+          statsd_address = "127.0.0.1:8125"
       }
     CONF
     it 'creates nomad metrics file in the nomad configuration directory' do
