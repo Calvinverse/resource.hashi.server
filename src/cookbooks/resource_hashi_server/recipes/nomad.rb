@@ -7,6 +7,11 @@
 # Copyright 2017, P. van der Velde
 #
 
+nomad_user = node['nomad']['service_user']
+poise_service_user nomad_user do
+  group node['nomad']['service_group']
+end
+
 directory Nomad::Helpers::CONFIG_ROOT.to_s do
   owner 'root'
   group 'root'
@@ -82,11 +87,12 @@ systemd_service 'nomad' do
   install do
     wanted_by %w[multi-user.target]
   end
+  requires %w[network-online.target]
   service do
     exec_start "/usr/local/bin/nomad agent #{args}"
     restart 'on-failure'
   end
-  requires %w[network-online.target]
+  user nomad_user
 end
 
 service 'nomad' do
