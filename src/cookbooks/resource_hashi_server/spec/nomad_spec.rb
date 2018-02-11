@@ -43,7 +43,7 @@ describe 'resource_hashi_server::nomad' do
       telemetry {
           publish_allocation_metrics = true
           publish_node_metrics       = true
-          statsd_address = "{{ keyOrDefault "config/services/metrics/protocols/statsd/host" "unknown" }}.service.{{ keyOrDefault "config/services/consul/domain" "consul" }}:{{ keyOrDefault "config/services/metrics/protocols/statsd/port" "80" }}"
+          statsd_address = "localhost:8125"
       }
     CONF
     it 'creates nomad metrics file in the nomad configuration directory' do
