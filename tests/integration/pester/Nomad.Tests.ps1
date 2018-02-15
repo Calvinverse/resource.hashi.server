@@ -77,7 +77,7 @@ Restart=on-failure
     }
 
     Context 'has linked to consul' {
-        $services = /opt/consul/1.0.2/consul catalog services -tags
+        $services = consul catalog services -tags
         It 'with the expected nomad services' {
             $services[0] | Should Match 'consul'
             $services[1] | Should Match 'jobs\s*http,rpc,serf'

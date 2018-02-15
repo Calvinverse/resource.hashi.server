@@ -74,7 +74,7 @@ WantedBy=multi-user.target
             $agentInformation | Should Not Be $null
         }
 
-        It 'is not a server instance' {
+        It 'is a server instance' {
             $agentInformation.Config.Server | Should Be $true
         }
     }
