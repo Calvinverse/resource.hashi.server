@@ -79,7 +79,8 @@ describe 'resource_hashi_server::firewall' do
       expect(chef_run).to create_firewall_rule('consul-serf-wan-udp').with(
         command: :allow,
         dest_port: 8302,
-        direction: :in
+        direction: :in,
+        protocol: :udp
       )
     end
   end
@@ -91,8 +92,7 @@ describe 'resource_hashi_server::firewall' do
       expect(chef_run).to create_firewall_rule('telegraf-statsd').with(
         command: :allow,
         dest_port: 8125,
-        direction: :in,
-        protocol: :udp
+        direction: :in
       )
     end
 
