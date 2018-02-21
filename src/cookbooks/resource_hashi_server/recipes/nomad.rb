@@ -19,6 +19,13 @@ directory Nomad::Helpers::CONFIG_ROOT.to_s do
   action :create
 end
 
+directory '/var/lib/nomad' do
+  owner nomad_user
+  group node['nomad']['service_group']
+  mode '0775'
+  action :create
+end
+
 file "#{Nomad::Helpers::CONFIG_ROOT}/base.hcl" do
   action :create
   content <<~HCL

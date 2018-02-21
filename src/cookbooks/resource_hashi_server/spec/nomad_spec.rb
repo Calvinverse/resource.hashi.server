@@ -3,6 +3,18 @@
 require 'spec_helper'
 
 describe 'resource_hashi_server::nomad' do
+  context 'creates the nomad directories' do
+    let(:chef_run) { ChefSpec::SoloRunner.converge(described_recipe) }
+
+    it 'creates the nomad config directory' do
+      expect(chef_run).to create_directory('/etc/nomad-conf.d')
+    end
+
+    it 'creates the nomad raft directory' do
+      expect(chef_run).to create_directory('/var/lib/nomad')
+    end
+  end
+
   context 'creates the nomad configuration files' do
     let(:chef_run) { ChefSpec::SoloRunner.converge(described_recipe) }
 
