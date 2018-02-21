@@ -37,6 +37,7 @@ WantedBy=multi-user.target
 
 [Service]
 ExecStart=/usr/local/bin/nomad agent -config=/etc/nomad-conf.d
+User=nomad
 Restart=on-failure
 
 '@
