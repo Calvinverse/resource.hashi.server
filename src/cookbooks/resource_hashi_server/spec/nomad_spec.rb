@@ -37,8 +37,8 @@ describe 'resource_hashi_server::nomad' do
 
       enable_syslog = true
 
-      leave_on_interrupt = true
-      leave_on_terminate = true
+      leave_on_interrupt = false
+      leave_on_terminate = false
 
       log_level = "INFO"
 
