@@ -4,14 +4,15 @@ Describe 'The nomad application' {
             '/usr/local/bin/nomad' | Should Exist
         }
 
-        It 'with default configuration in /etc/nomad-conf.d/server.hcl' {
-            '/etc/nomad-conf.d/server.hcl' | Should Exist
+        It 'with default configuration in /etc/nomad-conf.d/base.hcl' {
+            '/etc/nomad-conf.d/base.hcl' | Should Exist
         }
 
         It 'with environment configuration in /etc/nomad-conf.d' {
-            '/etc/nomad-conf.d/bootstrap.hcl' | Should Exist
-            '/etc/nomad-conf.d/connections.hcl' | Should Exist
+            '/etc/nomad-conf.d/metrics.hcl' | Should Exist
             '/etc/nomad-conf.d/region.hcl' | Should Exist
+            # '/etc/nomad-conf.d/secrets.hcl' | Should Exist
+            '/etc/nomad-conf.d/server.hcl' | Should Exist
         }
     }
 
@@ -36,6 +37,7 @@ WantedBy=multi-user.target
 
 [Service]
 ExecStart=/usr/local/bin/nomad agent -config=/etc/nomad-conf.d
+User=nomad
 Restart=on-failure
 
 '@
@@ -76,14 +78,10 @@ Restart=on-failure
     }
 
     Context 'has linked to consul' {
-        $response = Invoke-WebRequest -Uri http://localhost:8500/v1/agent/services -UseBasicParsing
-        $serviceInformation = ConvertFrom-Json $response.Content
+        $services = consul catalog services -tags
         It 'with the expected nomad services' {
-            $response.StatusCode | Should Be 200
-            $serviceInformation | Should Not Be $null
-            $serviceInformation.'_nomad-server-nomad-http' | Should Not Be $null
-            $serviceInformation.'_nomad-server-nomad-rpc' | Should Not Be $null
-            $serviceInformation.'_nomad-server-nomad-serf' | Should Not Be $null
+            $services[0] | Should Match 'consul'
+            $services[1] | Should Match 'jobs\s*http,rpc,serf'
         }
     }
 }

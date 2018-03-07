@@ -1,47 +1,11 @@
 # frozen_string_literal: true
 
 #
-# CONSUL
+# CONSULTEMPLATE
 #
 
-default['consul']['version'] = '0.9.2'
-default['consul']['config']['domain'] = 'consulverse'
-
-# This is not a consul server node
-default['consul']['config']['server'] = true
-
-# For the time being don't verify incoming and outgoing TLS signatures
-default['consul']['config']['verify_incoming'] = false
-default['consul']['config']['verify_outgoing'] = false
-
-# Bind the client address to the local host. The advertise and bind addresses
-# will be set in a separate configuration file
-default['consul']['config']['client_addr'] = '127.0.0.1'
-
-# Disable remote exec
-default['consul']['config']['disable_remote_exec'] = true
-
-# Disable the update check
-default['consul']['config']['disable_update_check'] = true
-
-# Set the DNS configuration
-default['consul']['config']['dns_config'] = {
-  allow_stale: true,
-  max_stale: '87600h',
-  node_ttl: '10s',
-  service_ttl: {
-    '*': '10s'
-  }
-}
-
-# Always leave the cluster if we are terminated
-default['consul']['config']['leave_on_terminate'] = true
-
-# Send all logs to syslog
-default['consul']['config']['log_level'] = 'INFO'
-default['consul']['config']['enable_syslog'] = true
-
-default['consul']['config']['owner'] = 'root'
+default['consul_template']['config_path'] = '/etc/consul-template.d/conf'
+default['consul_template']['template_path'] = '/etc/consul-template.d/templates'
 
 #
 # FIREWALL
@@ -63,35 +27,18 @@ default['firewall']['ipv6_enabled'] = false
 # NOMAD
 #
 
-default['nomad']['package'] = '0.6.2/nomad_0.6.2_linux_amd64.zip'
-default['nomad']['checksum'] = 'fbcb19a848fab36e86ed91bb66a1602cdff5ea7074a6d00162b96103185827b4'
+default['nomad']['package'] = '0.7.1/nomad_0.7.1_linux_amd64.zip'
+default['nomad']['checksum'] = '72b32799c2128ed9d2bb6cbf00c7600644a8d06c521a320e42d5493a5d8a789a'
 
-#
-# PROVISIONING
-#
+default['nomad']['service_user'] = 'nomad'
+default['nomad']['service_group'] = 'nomad'
 
-#
-# UNBOUND
-#
+default['nomad']['consul_template_metrics_file'] = 'nomad_metrics.ctmpl'
+default['nomad']['consul_template_region_file'] = 'nomad_region.ctmpl'
+default['nomad']['consul_template_secrets_file'] = 'nomad_secrets.ctmpl'
+default['nomad']['consul_template_server_file'] = 'nomad_server.ctmpl'
 
-default['unbound']['service_user'] = 'unbound'
-default['unbound']['service_group'] = 'unbound'
-
-default['paths']['unbound_config'] = '/etc/unbound.d'
-
-default['file_name']['unbound_config_file'] = 'unbound.conf'
-
-#
-# VAULT
-#
-
-default['hashicorp-vault']['version'] = '0.8.2'
-
-default['hashicorp-vault']['config']['habackend_type'] = 'consul'
-default['hashicorp-vault']['config']['habackend_options']['address'] = '127.0.0.1:8500'
-default['hashicorp-vault']['config']['habackend_options']['check_timeout'] = '10s'
-default['hashicorp-vault']['config']['habackend_options']['disable_registration'] = false
-default['hashicorp-vault']['config']['habackend_options']['path'] = 'vault/'
-default['hashicorp-vault']['config']['habackend_options']['scheme'] = 'http'
-
-default['hashicorp-vault']['config']['tls_disable'] = true
+default['nomad']['metrics_file'] = 'metrics.hcl'
+default['nomad']['region_file'] = 'region.hcl'
+default['nomad']['secrets_file'] = 'secrets.hcl'
+default['nomad']['server_file'] = 'server.hcl'
