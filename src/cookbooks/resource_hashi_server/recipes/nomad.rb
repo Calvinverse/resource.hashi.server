@@ -7,10 +7,22 @@
 # Copyright 2017, P. van der Velde
 #
 
+nomad_user = node['nomad']['service_user']
+poise_service_user nomad_user do
+  group node['nomad']['service_group']
+end
+
 directory Nomad::Helpers::CONFIG_ROOT.to_s do
   owner 'root'
   group 'root'
   mode '0755'
+  action :create
+end
+
+directory '/var/lib/nomad' do
+  owner nomad_user
+  group node['nomad']['service_group']
+  mode '0775'
   action :create
 end
 
@@ -35,8 +47,8 @@ file "#{Nomad::Helpers::CONFIG_ROOT}/base.hcl" do
 
     enable_syslog = true
 
-    leave_on_interrupt = true
-    leave_on_terminate = true
+    leave_on_interrupt = false
+    leave_on_terminate = false
 
     log_level = "INFO"
 
@@ -61,7 +73,7 @@ file "#{Nomad::Helpers::CONFIG_ROOT}/#{nomad_metrics_file}" do
     telemetry {
         publish_allocation_metrics = true
         publish_node_metrics       = true
-        statsd_address = "localhost:8125"
+        statsd_address = "127.0.0.1:8125"
     }
   CONF
   mode '755'
@@ -82,11 +94,12 @@ systemd_service 'nomad' do
   install do
     wanted_by %w[multi-user.target]
   end
+  requires %w[network-online.target]
   service do
     exec_start "/usr/local/bin/nomad agent #{args}"
     restart 'on-failure'
   end
-  requires %w[network-online.target]
+  user nomad_user
 end
 
 service 'nomad' do

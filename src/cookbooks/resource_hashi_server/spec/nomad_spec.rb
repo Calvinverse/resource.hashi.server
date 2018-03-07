@@ -3,6 +3,18 @@
 require 'spec_helper'
 
 describe 'resource_hashi_server::nomad' do
+  context 'creates the nomad directories' do
+    let(:chef_run) { ChefSpec::SoloRunner.converge(described_recipe) }
+
+    it 'creates the nomad config directory' do
+      expect(chef_run).to create_directory('/etc/nomad-conf.d')
+    end
+
+    it 'creates the nomad raft directory' do
+      expect(chef_run).to create_directory('/var/lib/nomad')
+    end
+  end
+
   context 'creates the nomad configuration files' do
     let(:chef_run) { ChefSpec::SoloRunner.converge(described_recipe) }
 
@@ -25,8 +37,8 @@ describe 'resource_hashi_server::nomad' do
 
       enable_syslog = true
 
-      leave_on_interrupt = true
-      leave_on_terminate = true
+      leave_on_interrupt = false
+      leave_on_terminate = false
 
       log_level = "INFO"
 
@@ -43,7 +55,7 @@ describe 'resource_hashi_server::nomad' do
       telemetry {
           publish_allocation_metrics = true
           publish_node_metrics       = true
-          statsd_address = "{{ keyOrDefault "config/services/metrics/protocols/statsd/host" "unknown" }}.service.{{ keyOrDefault "config/services/consul/domain" "consul" }}:{{ keyOrDefault "config/services/metrics/protocols/statsd/port" "80" }}"
+          statsd_address = "127.0.0.1:8125"
       }
     CONF
     it 'creates nomad metrics file in the nomad configuration directory' do
