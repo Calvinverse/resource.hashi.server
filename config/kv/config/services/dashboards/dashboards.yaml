@@ -1,0 +1,5 @@
+config:
+  # Define the dashboard for consul
+  - key: config/services/dashboards/metrics/provisioning/dashboards/system-consul
+    file: dashboards/system-consul.json
+
