@@ -439,7 +439,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Influx.System",
+      "datasource": "InfluxDb.System",
       "fill": 1,
       "gridPos": {
         "h": 8,
