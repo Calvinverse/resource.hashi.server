@@ -88,18 +88,21 @@ args = Nomad::Helpers.hash_to_arg_string(node['nomad']['daemon_args'])
 # IP address
 systemd_service 'nomad' do
   action :create
-  after %w[network-online.target]
-  description 'Nomad System Scheduler'
-  documentation 'https://nomadproject.io/docs/index.html'
+
   install do
     wanted_by %w[multi-user.target]
   end
-  requires %w[network-online.target]
   service do
     exec_start "/usr/local/bin/nomad agent #{args}"
     restart 'on-failure'
+    user nomad_user
   end
-  user nomad_user
+  unit do
+    after %w[network-online.target]
+    description 'Nomad System Scheduler'
+    documentation 'https://nomadproject.io/docs/index.html'
+    requires %w[network-online.target]
+  end
 end
 
 service 'nomad' do
