@@ -26,19 +26,19 @@ Describe 'The nomad application' {
         }
 
         $expectedContent = @'
+[Service]
+ExecStart = /usr/local/bin/nomad agent -config=/etc/nomad-conf.d
+Restart = on-failure
+User = nomad
+
 [Unit]
-Description=Nomad System Scheduler
-Requires=network-online.target
-After=network-online.target
-Documentation=https://nomadproject.io/docs/index.html
+Description = Nomad System Scheduler
+Documentation = https://nomadproject.io/docs/index.html
+Requires = network-online.target
+After = network-online.target
 
 [Install]
-WantedBy=multi-user.target
-
-[Service]
-ExecStart=/usr/local/bin/nomad agent -config=/etc/nomad-conf.d
-User=nomad
-Restart=on-failure
+WantedBy = multi-user.target
 
 '@
         $serviceFileContent = Get-Content $serviceConfigurationPath | Out-String
