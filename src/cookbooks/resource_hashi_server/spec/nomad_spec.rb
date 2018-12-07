@@ -73,10 +73,12 @@ describe 'resource_hashi_server::nomad' do
     it 'installs the nomad service' do
       expect(chef_run).to create_systemd_service('nomad').with(
         action: [:create],
-        after: %w[network-online.target],
-        description: 'Nomad System Scheduler',
-        documentation: 'https://nomadproject.io/docs/index.html',
-        requires: %w[network-online.target]
+        unit_after: %w[network-online.target],
+        unit_description: 'Nomad System Scheduler',
+        unit_documentation: 'https://nomadproject.io/docs/index.html',
+        unit_requires: %w[network-online.target],
+        service_restart: 'on-failure',
+        service_user: 'nomad'
       )
     end
 

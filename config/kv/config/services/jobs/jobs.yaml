@@ -1,0 +1,27 @@
+config:
+  - key: config/services/jobs/protocols/http/host
+    value: http.jobs
+
+  - key: config/services/jobs/protocols/http/port
+    value: 4646
+
+  - key: config/services/jobs/protocols/http/tls
+    value: false
+
+  - key: config/services/jobs/protocols/rpc/tls
+    value: false
+
+  - key: config/services/jobs/tls/verify
+    value: false
+
+  - key: config/services/jobs/vault/enabled
+    value: true
+
+  - key: config/services/jobs/vault/role
+    value: jobs-cluster
+
+  - key: config/services/jobs/vault/tls/skip
+    value: true
+
+  - key: config/services/jobs/metrics/statsd/rules
+    file: jobs_statsd_rules.txt

@@ -1,0 +1,5 @@
+config:
+  # Defines the file that contains the StatsD parsing rules used
+  # by Telegraf to handle the Consul StatsD metrics
+  - key: config/services/consul/metrics/statsd/rules
+    file: consul_statsd_rules.txt
