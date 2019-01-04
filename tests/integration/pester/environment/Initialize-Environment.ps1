@@ -110,17 +110,6 @@ function Set-ConsulKV
     & consul kv put -http-addr=http://127.0.0.1:8550 config/services/metrics/databases/system 'system'
     & consul kv put -http-addr=http://127.0.0.1:8550 config/services/metrics/databases/statsd 'services'
 
-    # Load config/services/jobs
-    & consul kv put -http-addr=http://127.0.0.1:8550 config/services/jobs/bootstrap '1'
-    & consul kv put -http-addr=http://127.0.0.1:8550 config/services/jobs/protocols/http/tls 'false'
-    & consul kv put -http-addr=http://127.0.0.1:8550 config/services/jobs/protocols/rpc/tls 'false'
-    & consul kv put -http-addr=http://127.0.0.1:8550 config/services/jobs/region 'integrationtest'
-    & consul kv put -http-addr=http://127.0.0.1:8550 config/services/jobs/tls/verify 'false'
-    & consul kv put -http-addr=http://127.0.0.1:8550 config/services/jobs/vault/enabled 'false'
-    & consul kv put -http-addr=http://127.0.0.1:8550 config/services/jobs/vault/ts/skip 'true'
-
-    & consul kv put -http-addr=http://127.0.0.1:8550 config/services/jobs/metrics/statsd/rules '\"nomad.*.*.* .measurement.measurement.field\",'
-
     # load config/services/queue
     & consul kv put -http-addr=http://127.0.0.1:8550 config/services/queue/protocols/http/host 'http.queue'
     & consul kv put -http-addr=http://127.0.0.1:8550 config/services/queue/protocols/http/port '15672'

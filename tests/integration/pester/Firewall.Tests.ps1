@@ -5,7 +5,7 @@ Describe 'The firewall' {
         It 'should return a status' {
             $ufwOutput | Should Not Be $null
             $ufwOutput.GetType().FullName | Should Be 'System.Object[]'
-            $ufwOutput.Length | Should Be 33
+            $ufwOutput.Length | Should Be 29
         }
 
         It 'should be enabled' {
@@ -46,20 +46,6 @@ Describe 'The firewall' {
 
         It 'on UDP port 8600' {
             ($ufwOutput | Where-Object {$_ -match '(8600/udp)\s*(ALLOW)\s*(Anywhere)'} ) | Should Not Be $null
-        }
-    }
-
-    Context 'should allow nomad' {
-        It 'on port 4646' {
-            ($ufwOutput | Where-Object {$_ -match '(4646/tcp)\s*(ALLOW)\s*(Anywhere)'} ) | Should Not Be $null
-        }
-
-        It 'on port 4647' {
-            ($ufwOutput | Where-Object {$_ -match '(4647/tcp)\s*(ALLOW)\s*(Anywhere)'} ) | Should Not Be $null
-        }
-
-        It 'on port 4648' {
-            ($ufwOutput | Where-Object {$_ -match '(4647/tcp)\s*(ALLOW)\s*(Anywhere)'} ) | Should Not Be $null
         }
     }
 

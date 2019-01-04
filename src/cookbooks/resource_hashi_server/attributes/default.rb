@@ -22,23 +22,3 @@ default['firewall']['allow_winrm'] = false
 
 # No communication via IPv6 at all
 default['firewall']['ipv6_enabled'] = false
-
-#
-# NOMAD
-#
-
-default['nomad']['package'] = '0.8.1/nomad_0.8.1_linux_amd64.zip'
-default['nomad']['checksum'] = '2d44c77f980fca9ad0af77137b101bb6f0bfe828950c99876c3360b654758a04'
-
-default['nomad']['service_user'] = 'nomad'
-default['nomad']['service_group'] = 'nomad'
-
-default['nomad']['consul_template_metrics_file'] = 'nomad_metrics.ctmpl'
-default['nomad']['consul_template_region_file'] = 'nomad_region.ctmpl'
-default['nomad']['consul_template_secrets_file'] = 'nomad_secrets.ctmpl'
-default['nomad']['consul_template_server_file'] = 'nomad_server.ctmpl'
-
-default['nomad']['metrics_file'] = 'metrics.hcl'
-default['nomad']['region_file'] = 'region.hcl'
-default['nomad']['secrets_file'] = 'secrets.hcl'
-default['nomad']['server_file'] = 'server.hcl'
