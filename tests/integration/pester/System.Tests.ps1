@@ -24,7 +24,7 @@ Describe 'On the system' {
 
     Context 'the environment variables' {
         It 'should have a variable indicating which services need a statsd sink' {
-            $env:STATSD_ENABLED_SERVICES | Should Be 'consul;jobs'
+            $env:STATSD_ENABLED_SERVICES | Should Be 'consul'
         }
     }
 
