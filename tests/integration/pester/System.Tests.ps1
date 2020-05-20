@@ -24,7 +24,7 @@ Describe 'On the system' {
 
     Context 'the environment variables' {
         It 'should have a variable indicating which services need a statsd sink' {
-            $env:STATSD_ENABLED_SERVICES | Should Be 'consul;jobs'
+            $env:STATSD_ENABLED_SERVICES | Should Be 'consul'
         }
     }
 
@@ -59,8 +59,7 @@ Describe 'On the system' {
         }
 
         $fileSize = (Get-Item '/test/updates.txt').Length
-        if ($fileSize -gt 0)
-        {
+        if ($fileSize -gt 0) {
             $updates = Get-Content /tmp/updates.txt
             $additionalPackages = Compare-Object $allowedPackages $updates | Where-Object { $_.sideindicator -eq '=>' }
 
@@ -83,10 +82,30 @@ Describe 'On the system' {
         It 'has disable the apt-daily timer' {
             $systemctlOutput | Should Not Be $null
             $systemctlOutput.GetType().FullName | Should Be 'System.Object[]'
-            $systemctlOutput.Length | Should Be 3
+            $systemctlOutput.Length | Should Be 4
             $systemctlOutput[0] | Should Match 'apt-daily.timer - Daily apt download activities'
             $systemctlOutput[1] | Should Match 'Loaded:\sloaded\s\(.*;\sdisabled;.*\)'
             $systemctlOutput[2] | Should Match 'Active:\sinactive\s\(dead\).*'
+            $systemctlOutput[3] | Should Match 'Trigger:\sn/a'
+        }
+
+        $aptPeriodicPath = '/etc/apt/apt.conf.d/10periodic'
+        if (-not (Test-Path $aptPeriodicPath)) {
+            It 'has an apt period configuration file' {
+                $false | Should Be $true
+            }
+        }
+
+        $expectedContent = @'
+APT::Periodic::Update-Package-Lists "0";
+APT::Periodic::Download-Upgradeable-Packages "0";
+APT::Periodic::AutocleanInterval "0";
+
+'@
+
+        $aptPeriodicFileContent = Get-Content $aptPeriodicPath | Out-String
+        It 'has an apt period file in which package updating is disabled' {
+            $aptPeriodicFileContent | Should Be ($expectedContent -replace "`r", "")
         }
     }
 }
