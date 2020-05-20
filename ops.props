@@ -537,12 +537,7 @@
         <TemplateTokens Include="ProductShortName">
             <ReplacementValue>$(ProductName.SubString($(ProductNamePrefix.Length)).Replace('.', '-').ToLower())</ReplacementValue>
         </TemplateTokens>
-        <TemplateTokens Include="LocalAdministratorName">
-            <ReplacementValue>thebigkahuna</ReplacementValue>
-        </TemplateTokens>
-        <TemplateTokens Include="LocalAdministratorPassword">
-            <ReplacementValue>TheB1gK@huna</ReplacementValue>
-        </TemplateTokens>
+
         <TemplateTokens Include="LinuxImage">
             <ReplacementValue>$(LinuxImage)</ReplacementValue>
         </TemplateTokens>
@@ -565,20 +560,15 @@
         <TemplateTokens Include="DirSrcCookbooksJsonEscaped">
             <ReplacementValue>$(DirBuildTempCookbooks.Replace('\', '/'))</ReplacementValue>
         </TemplateTokens>
-        <TemplateTokens Include="DirSrcProvisioningJsonEscaped">
-            <ReplacementValue>$(DirSrcProvisioning.Replace('\', '/'))</ReplacementValue>
-        </TemplateTokens>
         <TemplateTokens Include="DirTempJsonEscaped">
             <ReplacementValue>$(DirBuildTemp.Replace('\', '/'))</ReplacementValue>
         </TemplateTokens>
         <TemplateTokens Include="DirVendorCookbooksJsonEscaped">
             <ReplacementValue>$(DirVendorCookbooks.Replace('\', '/'))</ReplacementValue>
         </TemplateTokens>
-        <TemplateTokens Include="VmSwitch">
-            <ReplacementValue>VM-LAN</ReplacementValue>
-        </TemplateTokens>
-        <TemplateTokens Include="VmSwitchVlan">
-            <ReplacementValue></ReplacementValue>
+
+        <TemplateTokens Include="DirSrcProvisioningJsonEscaped">
+            <ReplacementValue>$(DirSrcProvisioning.Replace('\', '/'))</ReplacementValue>
         </TemplateTokens>
 
         <!-- Directories -->
@@ -586,6 +576,10 @@
             <ReplacementValue>$(DirTestsIntegration)</ReplacementValue>
         </TemplateTokens>
     </ItemGroup>
+
+    <Import
+        Condition="Exists('$(MSBuildThisFileDirectory)packer.hyperv.props') AND '$(ShouldCreateHyperVImage)' == 'true' "
+        Project="$(MSBuildThisFileDirectory)packer.hyperv.props" />
 
 
     <!--
