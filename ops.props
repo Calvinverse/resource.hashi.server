@@ -201,6 +201,7 @@
         <DirTestsIntegration>$(DirTests)\integration</DirTestsIntegration>
         <DirTestsIntegrationPacker>$(DirTestsIntegration)\packer</DirTestsIntegrationPacker>
         <DirTestsIntegrationPester>$(DirTestsIntegration)\pester</DirTestsIntegrationPester>
+        <DirTestsIntegrationProvision>$(DirTestsIntegration)\provision</DirTestsIntegrationProvision>
 
         <!-- The directory that contains all the vendor cookbooks -->
         <!-- <DirVendorCookbooks>$(DirWorkspace)\berks\cookbooks</DirVendorCookbooks> -->
@@ -559,6 +560,9 @@
 
         <TemplateTokens Include="DirSrcProvisioningJsonEscaped">
             <ReplacementValue>$(DirSrcProvisioning.Replace('\', '/'))</ReplacementValue>
+        </TemplateTokens>
+        <TemplateTokens Include="DirTestsIntegrationProvisionJsonEscaped">
+            <ReplacementValue>$(DirTestsIntegrationProvision.Replace('\', '/'))</ReplacementValue>
         </TemplateTokens>
 
         <!-- Directories -->
