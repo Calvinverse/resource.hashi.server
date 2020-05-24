@@ -12,6 +12,10 @@
     <ItemGroup
         Condition=" '$(ShouldCreateHyperVImage)' == 'true' ">
 
+        <TemplateTokens Include="ImageName">
+            <ReplacementValue>$(LinuxImage.Replace(' ', '-').Replace('.', '-').ToLower())</ReplacementValue>
+        </TemplateTokens>
+
         <TemplateTokens Include="LocalAdministratorName">
             <ReplacementValue>thebigkahuna</ReplacementValue>
         </TemplateTokens>

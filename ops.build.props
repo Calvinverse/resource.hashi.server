@@ -91,7 +91,9 @@
         -->
     </ItemGroup>
     <ItemGroup Condition=" '$(ShouldLoadArchiveFilesToCopy)' == 'true' ">
-        <ArchiveFilesToCopy Include="$(RepositoryArchive)\Base.Linux-$(VersionLinuxBaseResource).zip">
+        <ArchiveFilesToCopy
+            Condition=" '$(ShouldCreateHyperVImage)' == 'true' "
+            Include="$(RepositoryArchive)\Base.Linux-$(VersionLinuxBaseResource).zip">
             <Destination>$(DirBuildTempVmBase)</Destination>
         </ArchiveFilesToCopy>
     </ItemGroup>
@@ -140,6 +142,19 @@
         </BuildFilesToGenerate>
         <BuildFilesToGenerate Include="$(DirBuildTempCookbooks)\$(NameCookbook)\attributes\resource_information.rb">
             <Template>$(DirSrcCookbooks)\$(NameCookbook)\attributes\resource_information.rb</Template>
+            <Encoding></Encoding>
+        </BuildFilesToGenerate>
+
+        <BuildFilesToGenerate
+            Condition=" '$(ShouldCreateAzureImage)' == 'true' "
+            Include="$(DirBuildTemp)\build\azure.json">
+            <Template>$(DirSrcPacker)\azure.json</Template>
+            <Encoding></Encoding>
+        </BuildFilesToGenerate>
+        <BuildFilesToGenerate
+            Condition=" '$(ShouldCreateAzureImage)' == 'true' "
+            Include="$(DirBuildTemp)\build\azure_variables.json">
+            <Template>$(DirSrcPacker)\azure_variables.json</Template>
             <Encoding></Encoding>
         </BuildFilesToGenerate>
 
