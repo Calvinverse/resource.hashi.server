@@ -234,7 +234,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <VersionLinuxBaseResource>1804.3.0</VersionLinuxBaseResource>
+        <VersionLinuxBaseResource>1804.4.0</VersionLinuxBaseResource>
     </PropertyGroup>
 
 
@@ -335,7 +335,7 @@
 
         Any failure during the branching process will stop the build process.
     -->
-    <ItemGroup>
+    <ItemGroup Condition=" '$(ShouldLoadBranchMergeTarget)' == 'true' ">
         <!-- GITFLOW: If the input branch (GitBranchExpected) is a feature branch then we merge to develop -->
         <!--
         <BranchMergeTarget Include="develop"
@@ -534,7 +534,7 @@
     <PropertyGroup>
         <ProductNamePrefix>Resource.</ProductNamePrefix>
     </PropertyGroup>
-    <ItemGroup>
+    <ItemGroup Condition=" '$(ShouldLoadTemplateTokens)' == 'true' ">
         <!-- General -->
         <TemplateTokens Include="ProductShortName">
             <ReplacementValue>$(ProductName.SubString($(ProductNamePrefix.Length)).Replace('.', '-').ToLower())</ReplacementValue>
@@ -563,11 +563,6 @@
         </TemplateTokens>
         <TemplateTokens Include="DirTestsIntegrationProvisionJsonEscaped">
             <ReplacementValue>$(DirTestsIntegrationProvision.Replace('\', '/'))</ReplacementValue>
-        </TemplateTokens>
-
-        <!-- Directories -->
-        <TemplateTokens Include="DirTestsIntegration">
-            <ReplacementValue>$(DirTestsIntegration)</ReplacementValue>
         </TemplateTokens>
     </ItemGroup>
 
