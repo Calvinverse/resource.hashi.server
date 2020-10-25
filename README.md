@@ -5,7 +5,7 @@ instances of the core infrastructure application, [Consul](https://consul.io).
 
 ## Image
 
-The image is created by using the [Linux base image](http://tfs:8080/tfs/Vista/DevInfrastructure/_git/Template-Resource.Linux.Ubuntu.Server)
+The image is created by using the [Linux base image](https://github.com/Calvinverse/base.vm.linux)
 and amending it using a [Chef](https://www.chef.io/chef/) cookbook which configures Consul.
 
 There are two different images that can be created. One for use on a Hyper-V server and one for use
