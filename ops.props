@@ -234,7 +234,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <VersionLinuxBaseResource>1804.4.0</VersionLinuxBaseResource>
+        <VersionLinuxBaseResource>1804.5s.0</VersionLinuxBaseResource>
     </PropertyGroup>
 
 
