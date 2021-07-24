@@ -36,7 +36,7 @@ Describe 'The consul application' {
         }
 
         It 'with environment configuration in /etc/consul/conf.d' {
-            '/etc/consul/conf.d/bootstrap.json' | Should -not -Exist
+            '/etc/consul/conf.d/bootstrap.json' | Should -Exist
 
             '/etc/consul/conf.d/location.json' | Should -Exist
             '/etc/consul/conf.d/metrics.json' | Should -Exist
